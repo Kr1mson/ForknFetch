@@ -1,5 +1,8 @@
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+import pandas as pd
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_ollama import OllamaLLM
+
 from langchain.docstore.document import Document
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
@@ -8,7 +11,6 @@ import os
 os.environ["STREAMLIT_DISABLE_WATCHDOG_WARNINGS"] = "true"
 os.environ["STREAMLIT_WATCHER_TYPE"] = "none"
 from dotenv import load_dotenv
-from langchain_community.llms import Ollama
 import streamlit as st
 
 # Load environment variables
@@ -56,7 +58,7 @@ prompt = PromptTemplate(
 st.toast("📋 PromptTemplate initialized.")
 
 # Initialize the LLM
-llm = Ollama(model="llama3.2")
+llm = OllamaLLM(model="llama3.2")
 st.toast("🤖 Ollama LLM initialized.")
 
 # Create the RetrievalQA chain
