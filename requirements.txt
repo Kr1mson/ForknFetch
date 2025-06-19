@@ -9,4 +9,5 @@ torch
 langchain
 pandas
 numpy
+langchain-ollama
 transformers
