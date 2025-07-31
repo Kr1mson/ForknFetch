@@ -12,6 +12,27 @@ Fork & Fetch is a Retrieval-Augmented Generation (RAG) powered recipe assistant.
 - [**Embedder.py:**](https://github.com/Kr1mson/ForknFetch/blob/main/embedder.py) Demonstrates the process of creating embeddings from the recipe dataset using HuggingFace's sentence transformers.
 - [**Fork&Fetch.py:**](https://github.com/Kr1mson/ForknFetch/blob/main/Fork%26Fetch.py) Contains the complete RAG implementation for recipe search and recommendation with a user-friendly Streamlit UI.
 
+## 📈 Results
+
+### Automated Metrics
+
+| Metric   | Type         | Base LLM | RAG  | Improvement (%) |
+|----------|--------------|----------|------|-----------------|
+| **BLEU** | 1-gram       | 0.69     | 0.76 | +8.9%           |
+|          | 2-gram       | 0.62     | 0.69 | +11.2%          |
+|          | 3-gram       | 0.55     | 0.64 | +18.1%          |
+|          | 4-gram       | 0.49     | 0.61 | +26.7%          |
+| **Rouge-1** | F1 score  | 0.69     | 0.85 | +22.95%         |
+|          | Precision    | 0.69     | 0.90 | +30.64%         |
+|          | Recall       | 0.70     | 0.81 | +15.95%         |
+| **Rouge-2** | F1 score  | 0.42     | 0.71 | +69.20%         |
+|          | Precision    | 0.41     | 0.76 | +83.09%         |
+|          | Recall       | 0.43     | 0.68 | +56.19%         |
+| **Rouge-L** | F1 score  | 0.52     | 0.79 | +51.23%         |
+|          | Precision    | 0.52     | 0.84 | +61.15%         |
+|          | Recall       | 0.54     | 0.75 | +41.03%         |
+
+
 ## 📚 Dataset
 The recipe dataset was sourced from [**Eight Portions**](https://eightportions.com/datasets/Recipes/#fn:1) and contains approximately 125,000 recipes scraped from various food websites. Each recipe in the dataset includes:
 - Recipe title
