@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fork&Fetch 🍴 — AI Recipe Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green-900: #173404;
+      --green-800: #27500A;
+      --green-600: #3B6D11;
+      --green-400: #639922;
+      --green-100: #C0DD97;
+      --green-50:  #EAF3DE;
+      --amber-600: #854F0B;
+      --amber-400: #BA7517;
+      --amber-50:  #FAEEDA;
+      --gray-900: #2C2C2A;
+      --gray-600: #5F5E5A;
+      --gray-300: #C8C6BC;
+      --gray-100: #F1EFE8;
+      --gray-50:  #F8F7F4;
+      --white: #FFFFFF;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: var(--green-600);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--gray-900);
+      letter-spacing: -0.01em;
+    }
+
+    .logo-text em {
+      color: var(--green-600);
+      font-style: normal;
+    }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--gray-600);
+      background: var(--gray-100);
+      border-radius: 99px;
+      padding: 4px 10px;
+      border: 1px solid var(--gray-300);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-400);
+      flex-shrink: 0;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--gray-900);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 span {
+      color: var(--green-600);
+      font-style: italic;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--gray-600);
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    /* ── Search ── */
+    .search-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      background: var(--white);
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 6px 6px 6px 16px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--green-400);
+      box-shadow: 0 0 0 3px rgba(99,153,34,0.15);
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--gray-900);
+      background: transparent;
+      min-width: 0;
+    }
+
+    .search-box input::placeholder { color: var(--gray-600); }
+
+    .search-btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-600);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 10px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { background: var(--green-800); }
+    .search-btn:active { transform: scale(0.97); }
+    .search-btn:disabled { background: var(--green-100); color: var(--green-800); cursor: not-allowed; }
+
+    .search-btn svg { width: 16px; height: 16px; }
+
+    /* ── Suggestion chips ── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      max-width: 600px;
+      margin: 1.25rem auto 0;
+    }
+
+    .chip {
+      font-size: 13px;
+      padding: 6px 13px;
+      border-radius: 99px;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+      line-height: 1;
+    }
+
+    .chip:hover {
+      border-color: var(--green-400);
+      color: var(--green-800);
+      background: var(--green-50);
+    }
+
+    /* ── Main content ── */
+    main {
+      flex: 1;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── States ── */
+    .state-empty {
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+
+    .state-empty .illustration {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .state-empty h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 20px;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .state-empty p {
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    .state-loading {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 2rem 0;
+    }
+
+    .state-loading.active { display: flex; }
+
+    .loading-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-50) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: var(--radius-sm);
+      height: 14px;
+      margin-bottom: 10px;
+    }
+
+    .shimmer.wide { width: 60%; }
+    .shimmer.med  { width: 40%; }
+    .shimmer.full { width: 100%; }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .loading-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--gray-300);
+      border-top-color: var(--green-600);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Result card ── */
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .result-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--green-600);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .result-query {
+      font-size: 13px;
+      color: var(--gray-600);
+      background: var(--gray-100);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      max-width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .result-card {
+      display: none;
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .result-card.active { display: block; }
+
+    .result-card-inner {
+      padding: 1.75rem 2rem;
+    }
+
+    .result-body {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--gray-900);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Markdown-like styling */
+    .result-body strong {
+      font-weight: 500;
+      color: var(--gray-900);
+      display: block;
+      margin-top: 1.25rem;
+      margin-bottom: 0.25rem;
+      font-size: 15px;
+    }
+
+    .result-body strong:first-child { margin-top: 0; }
+
+    .result-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 2rem;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-300);
+      font-size: 12px;
+      color: var(--gray-600);
+      gap: 12px;
+    }
+
+    .footer-meta { display: flex; align-items: center; gap: 16px; }
+
+    .footer-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .footer-badge svg { width: 13px; height: 13px; opacity: 0.6; }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+
+    .copy-btn:hover { background: var(--white); border-color: var(--green-400); color: var(--green-800); }
+
+    .copy-btn svg { width: 13px; height: 13px; }
+
+    /* ── Error ── */
+    .error-banner {
+      display: none;
+      background: #FCEBEB;
+      border: 1px solid #F09595;
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      font-size: 14px;
+      color: #791F1F;
+      margin-bottom: 1rem;
+    }
+
+    .error-banner.active { display: block; }
+
+    /* ── History sidebar strip ── */
+    .history-strip {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .history-strip::-webkit-scrollbar { display: none; }
+
+    .history-chip {
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 99px;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-600);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.12s, color 0.12s;
+    }
+
+    .history-chip:hover { border-color: var(--green-400); color: var(--green-800); }
+
+    .history-label {
+      font-size: 12px;
+      color: var(--gray-600);
+      align-self: center;
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 12px;
+      color: var(--gray-600);
+      border-top: 1px solid var(--gray-300);
+      background: var(--white);
+    }
+
+    footer span { color: var(--green-600); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero { padding: 2rem 1.25rem 1.75rem; }
+      .result-card-inner { padding: 1.25rem; }
+      .result-card-footer { padding: 0.75rem 1.25rem; }
+      header { padding: 0 1.25rem; }
+      .result-query { max-width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">🍴</div>
+  <span class="logo-text">Fork<em>&</em>Fetch</span>
+  <div class="header-right">
+    <div class="status-pill" id="statusPill">
+      <span class="status-dot"></span>
+      <span id="statusText">Connecting…</span>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>What are you <span>craving</span><br>today?</h1>
+  <p>Describe a dish, ingredient, or mood — the AI chef will find the perfect recipe from the collection.</p>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <input type="text" id="queryInput" placeholder="e.g. spicy vegetarian pasta, quick chicken dinner…" autocomplete="off" />
+      <button class="search-btn" id="searchBtn" onclick="handleSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find recipe
+      </button>
+    </div>
+
+    <div class="chips" id="chips">
+      <span class="chip" onclick="prefill('quick weeknight dinner')">quick weeknight dinner</span>
+      <span class="chip" onclick="prefill('high protein breakfast')">high protein breakfast</span>
+      <span class="chip" onclick="prefill('vegetarian comfort food')">vegetarian comfort food</span>
+      <span class="chip" onclick="prefill('5 ingredients or less')">5 ingredients or less</span>
+      <span class="chip" onclick="prefill('something with lentils')">something with lentils</span>
+      <span class="chip" onclick="prefill('easy baking for beginners')">easy baking</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="error-banner" id="errorBanner"></div>
+
+  <div id="historyRow" style="display:none;">
+    <div class="history-strip" id="historyStrip">
+      <span class="history-label">Recent:</span>
+    </div>
+  </div>
+
+  <div id="stateEmpty" class="state-empty">
+    <div class="illustration">🥘</div>
+    <h2>Your recipe will appear here</h2>
+    <p>Try searching for a dish name, main ingredient,<br>or describe what you're in the mood for.</p>
+  </div>
+
+  <div class="state-loading" id="stateLoading">
+    <div class="loading-label">
+      <div class="spinner"></div>
+      <span id="loadingMsg">Searching the recipe collection…</span>
+    </div>
+    <div class="loading-card">
+      <div class="shimmer wide"></div>
+      <div class="shimmer full"></div>
+      <div class="shimmer med"></div>
+      <div class="shimmer full"></div>
+      <div class="shimmer full"></div>
+      <div style="margin-top:1.25rem;">
+        <div class="shimmer wide"></div>
+        <div class="shimmer full"></div>
+        <div class="shimmer med"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultHeader" style="display:none;" class="result-header">
+    <span class="result-label">Best match</span>
+    <span class="result-query" id="resultQueryLabel"></span>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-card-inner">
+      <div class="result-body" id="resultBody"></div>
+    </div>
+    <div class="result-card-footer">
+      <div class="footer-meta">
+        <span class="footer-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          llama3.2
+        </span>
+        <span class="footer-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Chroma · MiniLM-L6-v2
+        </span>
+        <span id="elapsedBadge" class="footer-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="elapsedText"></span>
+        </span>
+      </div>
+      <button class="copy-btn" onclick="copyResult()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Built with <span>Flask + LangChain + Ollama</span> · Fork&Fetch 🍴
+</footer>
+
+<script>
+  const API = '';  // same origin (Flask serves this file)
+  let history = [];
+  let lastResult = '';
+  let startTime = 0;
+
+  async function checkHealth() {
+    try {
+      const r = await fetch(`${API}/api/health`);
+      const d = await r.json();
+      document.getElementById('statusText').textContent = `Ready · ${d.device.toUpperCase()}`;
+      document.querySelector('.status-dot').style.background = '#639922';
+    } catch {
+      document.getElementById('statusText').textContent = 'Offline';
+      document.querySelector('.status-dot').style.background = '#E24B4A';
+    }
+  }
+
+  function prefill(text) {
+    document.getElementById('queryInput').value = text;
+    document.getElementById('queryInput').focus();
+  }
+
+  function showState(state) {
+    document.getElementById('stateEmpty').style.display   = state === 'empty'   ? 'block' : 'none';
+    document.getElementById('stateLoading').classList.toggle('active', state === 'loading');
+    document.getElementById('resultCard').classList.toggle('active', state === 'result');
+    document.getElementById('resultHeader').style.display = state === 'result'  ? 'flex'  : 'none';
+  }
+
+  const loadingMsgs = [
+    'Searching the recipe collection…',
+    'Retrieving relevant recipes…',
+    'Asking the AI chef…',
+    'Generating your recipe…',
+  ];
+
+  async function handleSearch() {
+    const query = document.getElementById('queryInput').value.trim();
+    if (!query) { document.getElementById('queryInput').focus(); return; }
+
+    document.getElementById('errorBanner').classList.remove('active');
+    document.getElementById('searchBtn').disabled = true;
+    showState('loading');
+
+    let msgIdx = 0;
+    const msgInterval = setInterval(() => {
+      document.getElementById('loadingMsg').textContent = loadingMsgs[Math.min(++msgIdx, loadingMsgs.length - 1)];
+    }, 2000);
+
+    startTime = Date.now();
+
+    try {
+      const res = await fetch(`${API}/api/search`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'Server error');
+      }
+
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+      lastResult = data.result;
+
+      document.getElementById('resultBody').innerHTML = formatResult(data.result);
+      document.getElementById('resultQueryLabel').textContent = `"${query}"`;
+      document.getElementById('elapsedText').textContent = `${elapsed}s`;
+
+      addToHistory(query);
+      showState('result');
+    } catch (err) {
+      const banner = document.getElementById('errorBanner');
+      banner.textContent = `Something went wrong: ${err.message}`;
+      banner.classList.add('active');
+      showState('empty');
+    } finally {
+      clearInterval(msgInterval);
+      document.getElementById('searchBtn').disabled = false;
+    }
+  }
+
+  function formatResult(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^- (.+)$/gm, '• $1')
+      .replace(/\n/g, '<br>');
+  }
+
+  function copyResult() {
+    navigator.clipboard.writeText(lastResult).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✓ Copied';
+      setTimeout(() => {
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+      }, 1800);
+    });
+  }
+
+  function addToHistory(query) {
+    if (history.includes(query)) return;
+    history.unshift(query);
+    if (history.length > 8) history.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const row = document.getElementById('historyRow');
+    const strip = document.getElementById('historyStrip');
+    row.style.display = history.length ? 'block' : 'none';
+    strip.innerHTML = '<span class="history-label">Recent:</span>';
+    history.forEach(q => {
+      const chip = document.createElement('span');
+      chip.className = 'history-chip';
+      chip.textContent = q;
+      chip.onclick = () => prefill(q);
+      strip.appendChild(chip);
+    });
+  }
+
+  document.getElementById('queryInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  checkHealth();
+</script>
+</body>
+</html>

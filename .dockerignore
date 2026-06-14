@@ -1,3 +1,4 @@
+.git
 .env
 __pycache__
 *.pyc
@@ -5,3 +6,5 @@ __pycache__
 .venv
 chroma_db
 data/
+stages/
+README.md

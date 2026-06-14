@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    container_name: fork_fetch_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./chroma_db:/app/chroma_db
+      - ./.env:/app/.env:ro
+    restart: unless-stopped
