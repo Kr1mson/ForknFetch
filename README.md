@@ -70,11 +70,14 @@ Sourced from [Eight Portions](https://eightportions.com/datasets/Recipes/#fn:1) 
 ### 0. Download the dataset
 
 1. Download the dataset from [Eight Portions](https://eightportions.com/datasets/Recipes/#fn:1)
-2. Unzip and place the CSV in `data/`:
+2. Unzip and place the folder containing json files under `data/`:
 
 ```
 data/
-└── recipes_cleaned.csv
+└── recipes_raw/
+    ├── recipes_raw_nosource_ar.json
+    ├── recipes_raw_nosource_epi.json
+    └── recipes_raw_nosource_fn.json
 ```
 
 ### 1. Configure environment
